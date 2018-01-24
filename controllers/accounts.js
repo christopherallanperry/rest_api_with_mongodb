@@ -1,19 +1,18 @@
 const Account = require('../models/account');
 
-// Remove reliance on user
+function accountsCreate(req, res) {
+  Account.create(req.body.account, (err, account) => {
+    if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
+    if (!account) return res.status(500).json({ success: false, message: 'Please send the correct information to create an account.' });
+    return res.status(201).json(account);
+  });
+}
+
 function accountsIndex(req, res) {
   Account.find((err, accounts) => {
     if(err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
     if (!accounts) return res.status(500).json({ success: false, message: "No accounts found" });
     return res.status(200).json(accounts);
-  });
-}
-
-function accountsCreate(req, res) {
-  Account.create(req.body.shoe, (err, account) => {
-    if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
-    if (!account) return res.status(500).json({ success: false, message: 'Please send the correct information to create an account.' });
-    return res.status(201).json(account);
   });
 }
 
