@@ -1,7 +1,7 @@
 const Account = require('../models/account');
 
 function accountsCreate(req, res) {
-  Account.create(req.body.account, (err, account) => {
+  Account.create(req.body, (err, account) => {
     if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
     if (!account) return res.status(500).json({ success: false, message: 'Please send the correct information to create an account.' });
     return res.status(201).json(account);
@@ -17,7 +17,7 @@ function accountsIndex(req, res) {
 }
 
 function accountsUpdate(req, res){
-  Account.findOneAndUpdate(req.params.id, req.body, (err, account) => {
+  Account.findByIdAndUpdate(req.params.id, req.body, (err, account) => {
     if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
     if (!account) return res.status(404).json({ message: 'Cannot update - Account not found' });
     return res.status(200).json(account);
