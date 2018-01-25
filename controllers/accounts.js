@@ -16,10 +16,18 @@ function accountsIndex(req, res) {
   });
 }
 
+function accountsShow(req, res) {
+  Account.findById(req.params.id, (err, account) => {
+    if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
+    if (!account) return res.status(404).json({ success: false, message: "Account not found." });
+    return res.status(200).json(account);
+  })
+}
+
 function accountsUpdate(req, res){
   Account.findByIdAndUpdate(req.params.id, req.body, (err, account) => {
     if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
-    if (!account) return res.status(404).json({ message: 'Cannot update - Account not found' });
+    if (!account) return res.status(404).json({ message: 'Cannot update - Account not found.' });
     return res.status(200).json(account);
   });
 }
@@ -27,13 +35,14 @@ function accountsUpdate(req, res){
 function accountsDelete(req, res){
   Account.findByIdAndRemove(req.params.id, (err, account) => {
     if (err) return res.status(500).json({ message: '500 server error - contact the server administrator.' });
-    if (!account) return res.status(404).json({ message: 'Cannot delete - Account not found' });
+    if (!account) return res.status(404).json({ message: 'Cannot delete - Account not found.' });
     return res.sendStatus(204);
   });
 }
 
 module.exports = {
   index:  accountsIndex,
+  show:   accountsShow,
   create: accountsCreate,
   update: accountsUpdate,
   delete: accountsDelete
